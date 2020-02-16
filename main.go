@@ -22,11 +22,11 @@ import (
 )
 
 func main() {
-	service := micro.NewService(
+	srv := micro.NewService(
 		micro.Name(Conf.Service),
 		micro.Version(Conf.Version),
 	)
-	service.Init()
+	srv.Init()
 
 	// 用户服务实现
 	repo := &service.UserRepository{db.DB}
@@ -51,7 +51,7 @@ func main() {
 	// 权限管理服务实现
 	casbinPB.RegisterCasbinHandler(srv.Server(), &hander.Casbin{casbin.Enforcer})
 	// Run the server
-	if err := service.Run(); err != nil {
+	if err := srv.Run(); err != nil {
 		log.Fatal(err)
 	}
 	log.Log("serviser run ...")
