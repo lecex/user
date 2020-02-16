@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"context"
 	"testing"
 
@@ -26,7 +27,7 @@ func TestFrontPermitUpdateOrCreate(t *testing.T) {
 	h := hander.FrontPermit{repo}
 	res := &frontPermitPB.Response{}
 	err := h.UpdateOrCreate(context.TODO(), req, res)
-	// fmt.Println(req, res, err)
+	fmt.Println(req, res, err)
 	t.Log(req, res, err)
 }
 func TestPermissionsUpdateOrCreate(t *testing.T) {
