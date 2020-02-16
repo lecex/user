@@ -3,7 +3,7 @@
 ## MACOS开发环境
 ```
     go get -u github.com/golang/protobuf/protoc-gen-go
-    go get -u github.com/micro/protoc-gen-micro/v2
+    go get -u github.com/micro/protoc-gen-micro
 
     go get -u github.com/gogo/protobuf/proto
     go get -u github.com/gogo/protobuf/protoc-gen-gogofaster
