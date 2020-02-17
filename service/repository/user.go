@@ -1,4 +1,4 @@
-package service
+package repository
 
 import (
 	"fmt"
@@ -10,8 +10,8 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-//URepository 仓库接口
-type URepository interface {
+//User 仓库接口
+type User interface {
 	Create(user *pb.User) (*pb.User, error)
 	Exist(user *pb.User) bool
 	Get(user *pb.User) (*pb.User, error)

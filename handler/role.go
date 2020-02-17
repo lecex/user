@@ -1,16 +1,17 @@
-package hander
+package handler
 
 import (
 	"context"
 	"fmt"
 
 	pb "github.com/lecex/user/proto/role"
-	"github.com/lecex/user/service"
+
+	"github.com/lecex/user/service/repository"
 )
 
 // Role 角色结构
 type Role struct {
-	Repo service.RRepository
+	Repo repository.Role
 }
 
 // All 获取所有权限

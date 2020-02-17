@@ -1,18 +1,18 @@
-package hander
+package handler
 
 import (
 	"context"
 	"fmt"
 
 	pb "github.com/lecex/user/proto/user"
-	"github.com/lecex/user/service"
+	"github.com/lecex/user/service/repository"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
 // User 用户结构
 type User struct {
-	Repo service.URepository
+	Repo repository.User
 }
 
 // Exist 用户是否存在

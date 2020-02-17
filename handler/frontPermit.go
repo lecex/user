@@ -1,16 +1,17 @@
-package hander
+package handler
 
 import (
 	"context"
 	"fmt"
 
 	pb "github.com/lecex/user/proto/frontPermit"
-	"github.com/lecex/user/service"
+
+	"github.com/lecex/user/service/repository"
 )
 
 // FrontPermit 前端权限结构
 type FrontPermit struct {
-	Repo service.FPRepository
+	Repo repository.FrontPermit
 }
 
 // UpdateOrCreate 创建或者更新

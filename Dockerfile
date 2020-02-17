@@ -1,4 +1,4 @@
-FROM bigrocs/golang-gcc:1.12 as builder
+FROM bigrocs/golang-gcc:1.13 as builder
 
 WORKDIR /go/src/github.com/lecex/user
 COPY . .

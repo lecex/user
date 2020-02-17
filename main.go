@@ -6,7 +6,7 @@ import (
 	"github.com/micro/go-micro/v2/util/log"
 
 	// 执行数据迁移
-	_ "github.com/lecex/user/database/migrations"
+	_ "github.com/lecex/user/providers/migrations"
 	db "github.com/lecex/user/providers/database"
 
 	authPB "github.com/lecex/user/proto/auth"
@@ -17,8 +17,9 @@ import (
 	userPB "github.com/lecex/user/proto/user"
 
 	"github.com/lecex/user/providers/casbin"
-	"github.com/lecex/user/hander"
+	"github.com/lecex/user/handler"
 	"github.com/lecex/user/service"
+	"github.com/lecex/user/service/repository"
 )
 
 func main() {
@@ -29,27 +30,27 @@ func main() {
 	srv.Init()
 
 	// 用户服务实现
-	repo := &service.UserRepository{db.DB}
-	userPB.RegisterUsersHandler(srv.Server(), &hander.User{repo})
+	repo := &repository.UserRepository{db.DB}
+	userPB.RegisterUsersHandler(srv.Server(), &handler.User{repo})
 
 	// token 服务实现
 	token := &service.TokenService{}
-	authPB.RegisterAuthHandler(srv.Server(), &hander.Auth{token, repo})
+	authPB.RegisterAuthHandler(srv.Server(), &handler.Auth{token, repo})
 
 	// 前端权限服务实现
-	fprepo := &service.FrontPermitRepository{db.DB}
-	frontPermitPB.RegisterFrontPermitsHandler(srv.Server(), &hander.FrontPermit{fprepo})
+	fprepo := &repository.FrontPermitRepository{db.DB}
+	frontPermitPB.RegisterFrontPermitsHandler(srv.Server(), &handler.FrontPermit{fprepo})
 
 	// 权限服务实现
-	prepo := &service.PermissionRepository{db.DB}
-	permissionPB.RegisterPermissionsHandler(srv.Server(), &hander.Permission{prepo})
+	prepo := &repository.PermissionRepository{db.DB}
+	permissionPB.RegisterPermissionsHandler(srv.Server(), &handler.Permission{prepo})
 
 	// 角色服务实现
-	rrepo := &service.RoleRepository{db.DB}
-	rolePB.RegisterRolesHandler(srv.Server(), &hander.Role{rrepo})
+	rrepo := &repository.RoleRepository{db.DB}
+	rolePB.RegisterRolesHandler(srv.Server(), &handler.Role{rrepo})
 
 	// 权限管理服务实现
-	casbinPB.RegisterCasbinHandler(srv.Server(), &hander.Casbin{casbin.Enforcer})
+	casbinPB.RegisterCasbinHandler(srv.Server(), &handler.Casbin{casbin.Enforcer})
 	// Run the server
 	if err := srv.Run(); err != nil {
 		log.Fatal(err)

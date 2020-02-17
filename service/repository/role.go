@@ -1,4 +1,4 @@
-package service
+package repository
 
 import (
 	"fmt"
@@ -10,8 +10,8 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-//RRepository 仓库接口
-type RRepository interface {
+//Role 仓库接口
+type Role interface {
 	Create(role *pb.Role) (*pb.Role, error)
 	Delete(role *pb.Role) (bool, error)
 	Update(role *pb.Role) (bool, error)

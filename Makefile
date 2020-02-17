@@ -12,3 +12,6 @@ proto:
 	protoc -I . --micro_out=. --gogofaster_out=. proto/permission/permission.proto
 	protoc -I . --micro_out=. --gogofaster_out=. proto/role/role.proto
 	protoc -I . --micro_out=. --gogofaster_out=. proto/casbin/casbin.proto
+.PHONY: docker
+docker:
+	docker build -f Dockerfile .

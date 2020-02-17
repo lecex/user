@@ -1,11 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"context"
 	"testing"
 
-	_ "github.com/lecex/user/database/migrations"
+	_ "github.com/lecex/user/providers/migrations"
 	db "github.com/lecex/user/providers/database"
 
 	authPB "github.com/lecex/user/proto/auth"
@@ -13,8 +12,9 @@ import (
 	permissionPB "github.com/lecex/user/proto/permission"
 	userPB "github.com/lecex/user/proto/user"
 	
-	"github.com/lecex/user/hander"
+	"github.com/lecex/user/handler"
 	"github.com/lecex/user/service"
+	"github.com/lecex/user/service/repository"
 )
 
 func TestFrontPermitUpdateOrCreate(t *testing.T) {
@@ -23,8 +23,8 @@ func TestFrontPermitUpdateOrCreate(t *testing.T) {
 			App: "ui", Service: "role", Method: "permission", Name: "角色权限", Description: "管理角色权限。",
 		},
 	}
-	repo := &service.FrontPermitRepository{db.DB}
-	h := hander.FrontPermit{repo}
+	repo := &repository.FrontPermitRepository{db.DB}
+	h := handler.FrontPermit{repo}
 	res := &frontPermitPB.Response{}
 	err := h.UpdateOrCreate(context.TODO(), req, res)
 	// fmt.Println(req, res, err)
@@ -36,16 +36,16 @@ func TestPermissionsUpdateOrCreate(t *testing.T) {
 			Service: "user-api", Method: "Auth.Auth1", Name: "用户授权3", Description: "用户登录授权返回 token 权限。",
 		},
 	}
-	repo := &service.PermissionRepository{db.DB}
-	h := hander.Permission{repo}
+	repo := &repository.PermissionRepository{db.DB}
+	h := handler.Permission{repo}
 	res := &permissionPB.Response{}
 	err := h.UpdateOrCreate(context.TODO(), req, res)
 	// fmt.Println(req, res, err)
 	t.Log(req, res, err)
 }
 func TestUserCreate(t *testing.T) {
-	repo := &service.UserRepository{db.DB}
-	h := hander.User{repo}
+	repo := &repository.UserRepository{db.DB}
+	h := handler.User{repo}
 	req := &userPB.Request{
 		User: &userPB.User{
 			Username: `bvbv0115`,
@@ -64,8 +64,8 @@ func TestUserCreate(t *testing.T) {
 }
 
 func TestUserIsExist(t *testing.T) {
-	repo := &service.UserRepository{db.DB}
-	h := hander.User{repo}
+	repo := &repository.UserRepository{db.DB}
+	h := handler.User{repo}
 	req := &userPB.Request{
 		User: &userPB.User{
 			Username: `bvbv0115`,
@@ -79,8 +79,8 @@ func TestUserIsExist(t *testing.T) {
 	t.Log(req, res, err)
 }
 func TestUserGet(t *testing.T) {
-	repo := &service.UserRepository{db.DB}
-	h := hander.User{repo}
+	repo := &repository.UserRepository{db.DB}
+	h := handler.User{repo}
 	req := &userPB.Request{
 		User: &userPB.User{
 			Username: `bvbv0115`,
@@ -93,8 +93,8 @@ func TestUserGet(t *testing.T) {
 }
 
 func TestUserList(t *testing.T) {
-	repo := &service.UserRepository{db.DB}
-	h := hander.User{repo}
+	repo := &repository.UserRepository{db.DB}
+	h := handler.User{repo}
 	req := &userPB.Request{
 		ListQuery: &userPB.ListQuery{
 			Limit: 20,
@@ -108,8 +108,8 @@ func TestUserList(t *testing.T) {
 	t.Log(req, res, err)
 }
 func TestUserUpdate(t *testing.T) {
-	// repo := &service.UserRepository{db.DB}
-	// h := hander.User{repo}
+	// repo := &repository.UserRepository{db.DB}
+	// h := handler.User{repo}
 	// req := &userPB.Request{
 	// 	User: &userPB.User{
 	// 		Id:       `8cd1d57f-6f53-49e4-b751-96eefc4f4b20`,
@@ -123,8 +123,8 @@ func TestUserUpdate(t *testing.T) {
 	// t.Log(req, res, err)
 }
 func TestUserDelete(t *testing.T) {
-	repo := &service.UserRepository{db.DB}
-	h := hander.User{repo}
+	repo := &repository.UserRepository{db.DB}
+	h := handler.User{repo}
 	req := &userPB.Request{
 		User: &userPB.User{
 			Id: `8cd1d57f-6f53-49e4-b751-96eefc4f4b20`,
@@ -138,9 +138,9 @@ func TestUserDelete(t *testing.T) {
 
 // Auth
 func TestAuth(t *testing.T) {
-	repo := &service.UserRepository{db.DB}
+	repo := &repository.UserRepository{db.DB}
 	token := &service.TokenService{}
-	h := hander.Auth{token, repo}
+	h := handler.Auth{token, repo}
 	req := &authPB.Request{
 		User: &authPB.User{
 			Username: `bvbv011`,
@@ -154,9 +154,9 @@ func TestAuth(t *testing.T) {
 }
 
 func TestAuthById(t *testing.T) {
-	repo := &service.UserRepository{db.DB}
+	repo := &repository.UserRepository{db.DB}
 	token := &service.TokenService{}
-	h := hander.Auth{token, repo}
+	h := handler.Auth{token, repo}
 	req := &authPB.Request{
 		User: &authPB.User{
 			Id: `c0a83b24-c01c-4601-a1c6-17e3c1864c5a`,
@@ -169,9 +169,9 @@ func TestAuthById(t *testing.T) {
 }
 
 func TestValidateToken(t *testing.T) {
-	repo := &service.UserRepository{db.DB}
+	repo := &repository.UserRepository{db.DB}
 	token := &service.TokenService{}
-	h := hander.Auth{token, repo}
+	h := handler.Auth{token, repo}
 	req := &authPB.Request{
 		Token: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyIjp7ImlkIjoiYzBhODNiMjQtYzAxYy00NjAxLWExYzYtMTdlM2MxODY0YzVhIn0sImV4cCI6MTU3MDM0OTc2MCwiaXNzIjoidXNlciJ9.Y3l55bE3StZL66RPbrTk8zVgUZBll0Pc6yV6ljb22k4`,
 	}

@@ -1,17 +1,17 @@
-package service
+package repository
 
 import (
 	"fmt"
 	// 公共引入
+	"github.com/jinzhu/gorm"
 	"github.com/micro/go-micro/v2/util/log"
 
 	pb "github.com/lecex/user/proto/frontPermit"
 
-	"github.com/jinzhu/gorm"
 )
 
-//FPRepository 仓库接口
-type FPRepository interface {
+//FrontPermit 仓库接口
+type FrontPermit interface {
 	Create(frontPermit *pb.FrontPermit) (*pb.FrontPermit, error)
 	Delete(frontPermit *pb.FrontPermit) (bool, error)
 	Update(frontPermit *pb.FrontPermit) (bool, error)

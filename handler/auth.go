@@ -1,4 +1,4 @@
-package hander
+package handler
 
 import (
 	"context"
@@ -9,13 +9,15 @@ import (
 
 	pb "github.com/lecex/user/proto/auth"
 	userPb "github.com/lecex/user/proto/user"
+	
 	"github.com/lecex/user/service"
+	"github.com/lecex/user/service/repository"
 )
 
 // Auth 授权服务处理
 type Auth struct {
 	TokenService service.Authable
-	Repo         service.URepository
+	Repo         repository.User
 }
 
 // AuthById 只通过 id 获取 jwt token

@@ -3,18 +3,18 @@ package migrations
 import (
 	"context"
 
+	"github.com/lecex/core/env"
 	"github.com/micro/go-micro/v2/util/log"
 
-	"github.com/lecex/core/env"
-	"github.com/lecex/user/hander"
 	casbinPB "github.com/lecex/user/proto/casbin"
 	frontPermitPB "github.com/lecex/user/proto/frontPermit"
 	permissionPB "github.com/lecex/user/proto/permission"
 	rolePB "github.com/lecex/user/proto/role"
 	userPB "github.com/lecex/user/proto/user"
-	db "github.com/lecex/user/providers/database"
-	"github.com/lecex/user/service"
 
+	db "github.com/lecex/user/providers/database"
+	"github.com/lecex/user/handler"
+	"github.com/lecex/user/service/repository"
 	"github.com/lecex/user/providers/casbin"
 )
 
@@ -118,8 +118,8 @@ func seeds() {
 
 func CreateRole() {
 	// 角色服务实现
-	repo := &service.RoleRepository{db.DB}
-	h := hander.Role{repo}
+	repo := &repository.RoleRepository{db.DB}
+	h := handler.Role{repo}
 	req := &rolePB.Request{
 		Role: &rolePB.Role{
 			Label:       `root`,
@@ -136,8 +136,8 @@ func CreateRole() {
 // CreateUser 填充文件
 func CreateUser() {
 	password := env.Getenv("ADMIN_PASSWORD", "admin123")
-	repo := &service.UserRepository{db.DB}
-	h := hander.User{repo}
+	repo := &repository.UserRepository{db.DB}
+	h := handler.User{repo}
 	req := &userPB.Request{
 		User: &userPB.User{
 			Username: `admin`,
@@ -157,7 +157,7 @@ func CreateUser() {
 
 // AddRole 增加用户角色
 func addRole(userID string, role string) {
-	h := hander.Casbin{casbin.Enforcer}
+	h := handler.Casbin{casbin.Enforcer}
 	req := &casbinPB.Request{
 		Label: userID,
 		Role:  role,

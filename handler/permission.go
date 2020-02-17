@@ -1,16 +1,17 @@
-package hander
+package handler
 
 import (
 	"context"
 	"fmt"
 
 	pb "github.com/lecex/user/proto/permission"
-	"github.com/lecex/user/service"
+	
+	"github.com/lecex/user/service/repository"
 )
 
 // Permission 权限结构
 type Permission struct {
-	Repo service.PRepository
+	Repo repository.Permission
 }
 
 // UpdateOrCreate 创建或者更新

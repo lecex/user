@@ -1,18 +1,18 @@
-package service
+package repository
 
 import (
 	"fmt"
 	// 公共引入
-	"github.com/micro/go-micro/v2/util/log"
-
-	"github.com/lecex/core/uitl"
 	"github.com/jinzhu/gorm"
+	"github.com/micro/go-micro/v2/util/log"
+	"github.com/lecex/core/uitl"
+
 
 	pb "github.com/lecex/user/proto/permission"
 )
 
-//PRepository 仓库接口
-type PRepository interface {
+//Permission 仓库接口
+type Permission interface {
 	Create(permission *pb.Permission) (*pb.Permission, error)
 	Delete(permission *pb.Permission) (bool, error)
 	Update(permission *pb.Permission) (bool, error)
