@@ -3,8 +3,8 @@ FROM bigrocs/golang-gcc:1.13 as builder
 WORKDIR /go/src/github.com/lecex/user
 COPY . .
 
-RUN GO111MODULE=off
-RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o bin/service
+ENV GO111MODULE=off CGO_ENABLED=1 GOOS=linux GOARCH=amd64
+RUN go build -a -installsuffix cgo -o bin/service
 
 FROM bigrocs/alpine:ca-data
 

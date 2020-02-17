@@ -14,4 +14,4 @@ proto:
 	protoc -I . --micro_out=. --gogofaster_out=. proto/casbin/casbin.proto
 .PHONY: docker
 docker:
-	docker build -f Dockerfile .
+	docker build -f Dockerfile  -t user .
