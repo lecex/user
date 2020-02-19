@@ -16,7 +16,7 @@ func main() {
 
 	service := micro.NewService(
 		micro.Name(config.Get("service", "name").String("user")),
-		micro.Version(config.Get("service", "bersion").String("latest")),
+		micro.Version(config.Get("service", "version").String("latest")),
 	)
 	service.Init()
 
