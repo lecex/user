@@ -2,8 +2,6 @@
 github.com/BurntSushi/toml
 # github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible
 github.com/Knetic/govaluate
-# github.com/bitly/go-simplejson v0.5.0
-github.com/bitly/go-simplejson
 # github.com/casbin/casbin v1.9.1
 github.com/casbin/casbin
 github.com/casbin/casbin/config
@@ -42,10 +40,6 @@ github.com/coreos/pkg/capnslog
 github.com/cpuguy83/go-md2man/v2/md2man
 # github.com/dgrijalva/jwt-go v3.2.0+incompatible
 github.com/dgrijalva/jwt-go
-# github.com/fsnotify/fsnotify v1.4.7
-github.com/fsnotify/fsnotify
-# github.com/ghodss/yaml v1.0.0
-github.com/ghodss/yaml
 # github.com/go-sql-driver/mysql v1.5.0
 github.com/go-sql-driver/mysql
 # github.com/gogo/protobuf v1.3.1
@@ -63,18 +57,6 @@ github.com/golang/protobuf/ptypes/struct
 github.com/golang/protobuf/ptypes/timestamp
 # github.com/google/uuid v1.1.1
 github.com/google/uuid
-# github.com/hashicorp/hcl v1.0.0
-github.com/hashicorp/hcl
-github.com/hashicorp/hcl/hcl/ast
-github.com/hashicorp/hcl/hcl/parser
-github.com/hashicorp/hcl/hcl/scanner
-github.com/hashicorp/hcl/hcl/strconv
-github.com/hashicorp/hcl/hcl/token
-github.com/hashicorp/hcl/json/parser
-github.com/hashicorp/hcl/json/scanner
-github.com/hashicorp/hcl/json/token
-# github.com/imdario/mergo v0.3.8
-github.com/imdario/mergo
 # github.com/jinzhu/gorm v1.9.12
 github.com/jinzhu/gorm
 github.com/jinzhu/gorm/dialects/mysql
@@ -83,8 +65,9 @@ github.com/jinzhu/gorm/dialects/postgres
 github.com/jinzhu/inflection
 # github.com/json-iterator/go v1.1.9
 github.com/json-iterator/go
-# github.com/lecex/core v0.0.0-20200216073835-db1ef10a558b
+# github.com/lecex/core v0.0.0-20200220064728-5061a2a1fd31
 github.com/lecex/core/client
+github.com/lecex/core/config
 github.com/lecex/core/env
 github.com/lecex/core/gorm
 github.com/lecex/core/uitl
@@ -120,20 +103,7 @@ github.com/micro/go-micro/v2/codec/json
 github.com/micro/go-micro/v2/codec/jsonrpc
 github.com/micro/go-micro/v2/codec/proto
 github.com/micro/go-micro/v2/codec/protorpc
-github.com/micro/go-micro/v2/config
 github.com/micro/go-micro/v2/config/cmd
-github.com/micro/go-micro/v2/config/encoder
-github.com/micro/go-micro/v2/config/encoder/hcl
-github.com/micro/go-micro/v2/config/encoder/json
-github.com/micro/go-micro/v2/config/encoder/toml
-github.com/micro/go-micro/v2/config/encoder/xml
-github.com/micro/go-micro/v2/config/encoder/yaml
-github.com/micro/go-micro/v2/config/loader
-github.com/micro/go-micro/v2/config/loader/memory
-github.com/micro/go-micro/v2/config/reader
-github.com/micro/go-micro/v2/config/reader/json
-github.com/micro/go-micro/v2/config/source
-github.com/micro/go-micro/v2/config/source/file
 github.com/micro/go-micro/v2/debug/log
 github.com/micro/go-micro/v2/debug/profile
 github.com/micro/go-micro/v2/debug/profile/http
@@ -326,8 +296,6 @@ google.golang.org/grpc/serviceconfig
 google.golang.org/grpc/stats
 google.golang.org/grpc/status
 google.golang.org/grpc/tap
-# gopkg.in/yaml.v2 v2.2.2
-gopkg.in/yaml.v2
 # honnef.co/go/tools v0.0.1-2019.2.3
 honnef.co/go/tools/arg
 honnef.co/go/tools/cmd/staticcheck

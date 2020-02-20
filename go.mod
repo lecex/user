@@ -10,7 +10,7 @@ require (
 	github.com/gogo/protobuf v1.3.1
 	github.com/golang/protobuf v1.3.3
 	github.com/jinzhu/gorm v1.9.12
-	github.com/lecex/core v0.0.0-20200216073835-db1ef10a558b
+	github.com/lecex/core v0.0.0-20200220064728-5061a2a1fd31
 	github.com/micro/go-micro/v2 v2.1.0
 	github.com/satori/go.uuid v1.2.0
 	golang.org/x/crypto v0.0.0-20200219234226-1ad67e1f0ef4

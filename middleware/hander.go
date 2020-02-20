@@ -17,7 +17,7 @@ import (
 // Handler 处理器
 // 包含一些高阶函数比如中间件常用的 token 验证等
 type Handler struct {
-	Permissions []PB.Permission
+	Permissions []*PB.Permission
 	UserService string
 }
 
