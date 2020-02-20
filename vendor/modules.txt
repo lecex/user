@@ -65,9 +65,8 @@ github.com/jinzhu/gorm/dialects/postgres
 github.com/jinzhu/inflection
 # github.com/json-iterator/go v1.1.9
 github.com/json-iterator/go
-# github.com/lecex/core v0.0.0-20200220064728-5061a2a1fd31
+# github.com/lecex/core v0.0.0-20200220071759-ccc0d1fffcf0
 github.com/lecex/core/client
-github.com/lecex/core/config
 github.com/lecex/core/env
 github.com/lecex/core/gorm
 github.com/lecex/core/uitl
