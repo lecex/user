@@ -17,8 +17,9 @@ service Permissions {
     // 删除权限
     rpc Delete(Request) returns (Response) {}
     // 微服务内部调用
-    // 同步
     rpc UpdateOrCreate(Request) returns (Response) {}
+    // 同步 批量 UpdateOrCreate
+    rpc Sync(Request) returns (Response) {}
 
 }
 
@@ -43,6 +44,7 @@ message ListQuery{
 message Request{
     ListQuery list_query = 1;           // 列表分页请求
     Permission permission = 2;
+    repeated Permission permissions = 3;
 }
 
 message Response{

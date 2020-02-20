@@ -48,8 +48,9 @@ type PermissionsService interface {
 	// 删除权限
 	Delete(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 	// 微服务内部调用
-	// 同步
 	UpdateOrCreate(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
+	// 同步 批量 UpdateOrCreate
+	Sync(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 }
 
 type permissionsService struct {
@@ -134,6 +135,16 @@ func (c *permissionsService) UpdateOrCreate(ctx context.Context, in *Request, op
 	return out, nil
 }
 
+func (c *permissionsService) Sync(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "Permissions.Sync", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Permissions service
 
 type PermissionsHandler interface {
@@ -151,8 +162,9 @@ type PermissionsHandler interface {
 	// 删除权限
 	Delete(context.Context, *Request, *Response) error
 	// 微服务内部调用
-	// 同步
 	UpdateOrCreate(context.Context, *Request, *Response) error
+	// 同步 批量 UpdateOrCreate
+	Sync(context.Context, *Request, *Response) error
 }
 
 func RegisterPermissionsHandler(s server.Server, hdlr PermissionsHandler, opts ...server.HandlerOption) error {
@@ -164,6 +176,7 @@ func RegisterPermissionsHandler(s server.Server, hdlr PermissionsHandler, opts .
 		Update(ctx context.Context, in *Request, out *Response) error
 		Delete(ctx context.Context, in *Request, out *Response) error
 		UpdateOrCreate(ctx context.Context, in *Request, out *Response) error
+		Sync(ctx context.Context, in *Request, out *Response) error
 	}
 	type Permissions struct {
 		permissions
@@ -202,4 +215,8 @@ func (h *permissionsHandler) Delete(ctx context.Context, in *Request, out *Respo
 
 func (h *permissionsHandler) UpdateOrCreate(ctx context.Context, in *Request, out *Response) error {
 	return h.PermissionsHandler.UpdateOrCreate(ctx, in, out)
+}
+
+func (h *permissionsHandler) Sync(ctx context.Context, in *Request, out *Response) error {
+	return h.PermissionsHandler.Sync(ctx, in, out)
 }

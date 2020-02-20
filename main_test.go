@@ -10,7 +10,7 @@ import (
 	frontPermitPB "github.com/lecex/user/proto/frontPermit"
 	permissionPB "github.com/lecex/user/proto/permission"
 	userPB "github.com/lecex/user/proto/user"
-	
+
 	"github.com/lecex/user/handler"
 )
 
@@ -24,6 +24,23 @@ func TestFrontPermitUpdateOrCreate(t *testing.T) {
 	handler := &handler.Handler{}
 	h := handler.FrontPermit()
 	err := h.UpdateOrCreate(context.TODO(), req, res)
+	// fmt.Println(req, res, err)
+	t.Log(req, res, err)
+}
+func TestPermissionsSync(t *testing.T) {
+	req := &permissionPB.Request{
+		Permissions: []*permissionPB.Permission{
+			{Service: "Users", Method: "Create", Auth: true, Policy: true, Name: "创建用户", Description: "创建新用户权限。"},
+			{Service: "Users", Method: "Exist", Auth: false, Policy: false, Name: "检测用户", Description: "检测用户是否存在权限。"},
+			{Service: "Users", Method: "Get", Auth: true, Policy: true, Name: "用户查询", Description: "查询用户信息权限。"},
+			{Service: "Auth", Method: "Auth", Auth: false, Policy: false, Name: "用户授权", Description: "用户登录授权返回 token 权限。"},
+			{Service: "Auth", Method: "ValidateToken", Auth: false, Policy: false, Name: "权限认证", Description: "权限相关认证权限。"},
+		},
+	}
+	res := &permissionPB.Response{}
+	handler := &handler.Handler{}
+	h := handler.Permission()
+	err := h.Sync(context.TODO(), req, res)
 	// fmt.Println(req, res, err)
 	t.Log(req, res, err)
 }

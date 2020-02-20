@@ -5,13 +5,25 @@ import (
 	"fmt"
 
 	pb "github.com/lecex/user/proto/permission"
-	
+
 	"github.com/lecex/user/service/repository"
 )
 
 // Permission 权限结构
 type Permission struct {
 	Repo repository.Permission
+}
+
+// Sync 批量同步权限
+func (srv *Permission) Sync(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
+	for _, p := range req.Permissions {
+		req.Permission = p
+		err = srv.UpdateOrCreate(ctx, req, res)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // UpdateOrCreate 创建或者更新
