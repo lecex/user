@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	PB "github.com/lecex/user/proto/permission"
