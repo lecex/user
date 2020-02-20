@@ -16,10 +16,8 @@ func main() {
 		micro.Version(Conf.Version),
 	)
 	service.Init()
-
 	 // 注册服务
 	handler.Register(service.Server())
-
 	// Run the server
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
