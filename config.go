@@ -1,11 +1,18 @@
 package main
 
 import (
-	"github.com/lecex/core/config"
+	PB "github.com/lecex/user/proto/permission"
 )
 
+// Config 配置
+type Config struct {
+	Service     string
+	Version     string
+	Permissions []*PB.Permission
+}
+
 // Conf 配置
-var Conf config.Config = config.Config{
+var Conf Config = Config{
 	Service: "user",
 	Version: "latest",
 }
