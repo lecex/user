@@ -5,9 +5,7 @@ import (
 
 	"github.com/micro/go-micro/v2/client"
 	"github.com/micro/go-micro/v2/config/cmd"
-
 )
-
 
 func init() {
 	cmd.Init()
