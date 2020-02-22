@@ -45,9 +45,9 @@ func (srv *Handler) Wrapper(fn server.HandlerFunc) server.HandlerFunc {
 				}
 
 				// 设置用户 id
-				meta["user_id"] = authRes.User.Id
-				meta["service"] = req.Service()
-				meta["method"] = req.Method()
+				meta["Userid"] = authRes.User.Id
+				meta["Service"] = req.Service()
+				meta["Method"] = req.Method()
 				ctx = metadata.NewContext(ctx, meta)
 				if srv.IsPolicy(req) {
 					// 通过 meta user_id 验证权限
