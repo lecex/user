@@ -18,17 +18,18 @@ import (
 )
 
 // Handler 注册方法
-type Handler struct {}
+type Handler struct {
+	Server server.Server
+}
 
 // Register 注册
-func Register(s server.Server)  {
-	h := &Handler{}
-	userPB.RegisterUsersHandler(s, h.User())	// 用户服务实现
-	authPB.RegisterAuthHandler(s, h.Auth())	// token 服务实现
-	frontPermitPB.RegisterFrontPermitsHandler(s, h.FrontPermit())	// 前端权限服务实现
-	permissionPB.RegisterPermissionsHandler(s, h.Permission())	// 权限服务实现
-	rolePB.RegisterRolesHandler(s, h.Role())	// 角色服务实现
-	casbinPB.RegisterCasbinHandler(s, h.Casbin()) // 权限管理服务实现
+func (srv *Handler) Register() {
+	userPB.RegisterUsersHandler(srv.Server, srv.User())	// 用户服务实现
+	authPB.RegisterAuthHandler(srv.Server, srv.Auth())	// token 服务实现
+	frontPermitPB.RegisterFrontPermitsHandler(srv.Server, srv.FrontPermit())	// 前端权限服务实现
+	permissionPB.RegisterPermissionsHandler(srv.Server, srv.Permission())	// 权限服务实现
+	rolePB.RegisterRolesHandler(srv.Server, srv.Role())	// 角色服务实现
+	casbinPB.RegisterCasbinHandler(srv.Server, srv.Casbin()) // 权限管理服务实现
 }
 
 // User 用户管理服务实现
