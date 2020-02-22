@@ -32,7 +32,7 @@ func (srv *Handler) Wrapper(fn server.HandlerFunc) server.HandlerFunc {
 			if !ok {
 				return errors.New("no auth meta-data found in request")
 			}
-			if token, ok := meta["x-token"]; ok {
+			if token, ok := meta["X-Token"]; ok {
 				// Note this is now uppercase (not entirely sure why this is...)
 				// token := strings.Split(meta["authorization"], "Bearer ")[1]
 				// Auth here
