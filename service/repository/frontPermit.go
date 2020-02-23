@@ -6,8 +6,8 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/micro/go-micro/v2/util/log"
 
+	"github.com/lecex/core/uitl"
 	pb "github.com/lecex/user/proto/frontPermit"
-
 )
 
 //FrontPermit 仓库接口
@@ -38,29 +38,11 @@ func (repo *FrontPermitRepository) All(req *pb.Request) (frontPermits []*pb.Fron
 // List 获取所有前端权限信息
 func (repo *FrontPermitRepository) List(req *pb.ListQuery) (frontPermits []*pb.FrontPermit, err error) {
 	db := repo.DB
-	// 分页
-	var limit, offset int64
-	if req.Limit > 0 {
-		limit = req.Limit
-	} else {
-		limit = 10
-	}
-	if req.Page > 1 {
-		offset = (req.Page - 1) * limit
-	} else {
-		offset = -1
-	}
-
-	// 排序
-	var sort string
-	if req.Sort != "" {
-		sort = req.Sort
-	} else {
-		sort = "id desc"
-	}
+	limit, offset := uitl.Page(req.Limit, req.Page) // 分页
+	sort := uitl.Sort(req.Sort)                     // 排序 默认 created_at desc
 	// 查询条件
-	if req.Name != "" {
-		db = db.Where("name like ?", "%"+req.Name+"%")
+	if req.Where != "" {
+		db = db.Where(req.Where)
 	}
 	if err := db.Order(sort).Limit(limit).Offset(offset).Find(&frontPermits).Error; err != nil {
 		log.Log(err)
@@ -74,8 +56,8 @@ func (repo *FrontPermitRepository) Total(req *pb.ListQuery) (total int64, err er
 	frontPermits := []pb.FrontPermit{}
 	db := repo.DB
 	// 查询条件
-	if req.Name != "" {
-		db = db.Where("name like ?", "%"+req.Name+"%")
+	if req.Where != "" {
+		db = db.Where(req.Where)
 	}
 	if err := db.Find(&frontPermits).Count(&total).Error; err != nil {
 		log.Log(err)
@@ -85,11 +67,11 @@ func (repo *FrontPermitRepository) Total(req *pb.ListQuery) (total int64, err er
 }
 
 // Get 获取前端权限信息
-func (repo *FrontPermitRepository) Get(p *pb.FrontPermit) (*pb.FrontPermit, error) {
-	if err := repo.DB.Model(&p).Where(p).Find(&p).Error; err != nil {
+func (repo *FrontPermitRepository) Get(frontPermit *pb.FrontPermit) (*pb.FrontPermit, error) {
+	if err := repo.DB.Where(&frontPermit).Find(&frontPermit).Error; err != nil {
 		return nil, err
 	}
-	return p, nil
+	return frontPermit, nil
 }
 
 // Create 创建前端权限

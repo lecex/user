@@ -5,6 +5,7 @@ import (
 	// 公共引入
 	"github.com/micro/go-micro/v2/util/log"
 
+	"github.com/lecex/core/uitl"
 	pb "github.com/lecex/user/proto/role"
 
 	"github.com/jinzhu/gorm"
@@ -38,29 +39,10 @@ func (repo *RoleRepository) All(req *pb.Request) (roles []*pb.Role, err error) {
 // List 获取所有角色信息
 func (repo *RoleRepository) List(req *pb.ListQuery) (roles []*pb.Role, err error) {
 	db := repo.DB
-	// 分页
-	var limit, offset int64
-	if req.Limit > 0 {
-		limit = req.Limit
-	} else {
-		limit = 10
-	}
-	if req.Page > 1 {
-		offset = (req.Page - 1) * limit
-	} else {
-		offset = -1
-	}
-
-	// 排序
-	var sort string
-	if req.Sort != "" {
-		sort = req.Sort
-	} else {
-		sort = "id desc"
-	}
-	// 查询条件
-	if req.Label != "" {
-		db = db.Where("label like ?", "%"+req.Label+"%")
+	limit, offset := uitl.Page(req.Limit, req.Page) // 分页
+	sort := uitl.Sort(req.Sort)                     // 排序 默认 created_at desc
+	if req.Where != "" {
+		db = db.Where(req.Where)
 	}
 	if err := db.Order(sort).Limit(limit).Offset(offset).Find(&roles).Error; err != nil {
 		log.Log(err)
@@ -74,8 +56,8 @@ func (repo *RoleRepository) Total(req *pb.ListQuery) (total int64, err error) {
 	roles := []pb.Role{}
 	db := repo.DB
 	// 查询条件
-	if req.Label != "" {
-		db = db.Where("label like ?", "%"+req.Label+"%")
+	if req.Where != "" {
+		db = db.Where(req.Where)
 	}
 	if err := db.Find(&roles).Count(&total).Error; err != nil {
 		log.Log(err)
@@ -85,23 +67,11 @@ func (repo *RoleRepository) Total(req *pb.ListQuery) (total int64, err error) {
 }
 
 // Get 获取角色信息
-func (repo *RoleRepository) Get(r *pb.Role) (*pb.Role, error) {
-	if r.Id > 0 {
-		if err := repo.DB.Model(&r).Where("id = ?", r.Id).Find(&r).Error; err != nil {
-			return nil, err
-		}
+func (repo *RoleRepository) Get(role *pb.Role) (*pb.Role, error) {
+	if err := repo.DB.Where(&role).Find(&role).Error; err != nil {
+		return nil, err
 	}
-	if r.Label != "" {
-		if err := repo.DB.Model(&r).Where("label = ?", r.Label).Find(&r).Error; err != nil {
-			return nil, err
-		}
-	}
-	if r.Name != "" {
-		if err := repo.DB.Model(&r).Where("name = ?", r.Name).Find(&r).Error; err != nil {
-			return nil, err
-		}
-	}
-	return r, nil
+	return role, nil
 }
 
 // Create 创建角色

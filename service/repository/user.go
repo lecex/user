@@ -5,6 +5,7 @@ import (
 	// 公共引入
 	"github.com/micro/go-micro/v2/util/log"
 
+	"github.com/lecex/core/uitl"
 	pb "github.com/lecex/user/proto/user"
 
 	"github.com/jinzhu/gorm"
@@ -53,35 +54,10 @@ func (repo *UserRepository) Exist(user *pb.User) bool {
 // List 获取所有用户信息
 func (repo *UserRepository) List(req *pb.ListQuery) (users []*pb.User, err error) {
 	db := repo.DB
-	// 分页
-	var limit, offset int64
-	if req.Limit > 0 {
-		limit = req.Limit
-	} else {
-		limit = 10
-	}
-	if req.Page > 1 {
-		offset = (req.Page - 1) * limit
-	} else {
-		offset = -1
-	}
-
-	// 排序
-	var sort string
-	if req.Sort != "" {
-		sort = req.Sort
-	} else {
-		sort = "created_at desc"
-	}
-	// 查询条件
-	if req.Username != "" {
-		db = db.Where("username like ?", "%"+req.Username+"%")
-	}
-	if req.Mobile != "" {
-		db = db.Where("mobile like ?", "%"+req.Mobile+"%")
-	}
-	if req.Email != "" {
-		db = db.Where("email like ?", "%"+req.Email+"%")
+	limit, offset := uitl.Page(req.Limit, req.Page) // 分页
+	sort := uitl.Sort(req.Sort)                     // 排序 默认 created_at desc
+	if req.Where != "" {
+		db = db.Where(req.Where)
 	}
 	if err := db.Order(sort).Limit(limit).Offset(offset).Find(&users).Error; err != nil {
 		log.Log(err)
@@ -95,14 +71,8 @@ func (repo *UserRepository) Total(req *pb.ListQuery) (total int64, err error) {
 	users := []pb.User{}
 	db := repo.DB
 	// 查询条件
-	if req.Username != "" {
-		db = db.Where("username like ?", "%"+req.Username+"%")
-	}
-	if req.Mobile != "" {
-		db = db.Where("mobile like ?", "%"+req.Mobile+"%")
-	}
-	if req.Email != "" {
-		db = db.Where("email like ?", "%"+req.Email+"%")
+	if req.Where != "" {
+		db = db.Where(req.Where)
 	}
 	if err := db.Find(&users).Count(&total).Error; err != nil {
 		log.Log(err)
@@ -113,25 +83,8 @@ func (repo *UserRepository) Total(req *pb.ListQuery) (total int64, err error) {
 
 // Get 获取用户信息
 func (repo *UserRepository) Get(user *pb.User) (*pb.User, error) {
-	if user.Id != "" {
-		if err := repo.DB.Model(&user).Where("id = ?", user.Id).Find(&user).Error; err != nil {
-			return nil, err
-		}
-	}
-	if user.Username != "" {
-		if err := repo.DB.Model(&user).Where("username = ?", user.Username).Find(&user).Error; err != nil {
-			return nil, err
-		}
-	}
-	if user.Mobile != "" {
-		if err := repo.DB.Model(&user).Where("mobile = ?", user.Mobile).Find(&user).Error; err != nil {
-			return nil, err
-		}
-	}
-	if user.Email != "" {
-		if err := repo.DB.Model(&user).Where("email = ?", user.Email).Find(&user).Error; err != nil {
-			return nil, err
-		}
+	if err := repo.DB.Where(&user).Find(&user).Error; err != nil {
+		return nil, err
 	}
 	return user, nil
 }

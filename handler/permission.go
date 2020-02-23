@@ -54,7 +54,7 @@ func (srv *Permission) All(ctx context.Context, req *pb.Request, res *pb.Respons
 // List 获取所有权限
 func (srv *Permission) List(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
 	permissions, err := srv.Repo.List(req.ListQuery)
-	total, err := srv.Repo.Total(req.Permission)
+	total, err := srv.Repo.Total(req.ListQuery)
 	if err != nil {
 		return err
 	}

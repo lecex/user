@@ -17,8 +17,8 @@ type Permission interface {
 	Update(permission *pb.Permission) (bool, error)
 	Get(permission *pb.Permission) (*pb.Permission, error)
 	All(req *pb.Request) ([]*pb.Permission, error)
-	List(listQuery *pb.ListQuery, per *pb.Permission) ([]*pb.Permission, error)
-	Total(req *pb.Permission) (int64, error)
+	List(req *pb.ListQuery) ([]*pb.Permission, error)
+	Total(req *pb.ListQuery) (int64, error)
 }
 
 // PermissionRepository 权限仓库
@@ -36,16 +36,13 @@ func (repo *PermissionRepository) All(req *pb.Request) (permissions []*pb.Permis
 }
 
 // List 获取所有权限信息
-func (repo *PermissionRepository) List(listQuery *pb.ListQuery) (permissions []*pb.Permission, err error) {
+func (repo *PermissionRepository) List(req *pb.ListQuery) (permissions []*pb.Permission, err error) {
 	db := repo.DB
-	// 计算分页
-	limit, offset := uitl.Page(listQuery.Limit, listQuery.Page)
-	// 排序
-	var sort string
-	if listQuery.Sort != "" {
-		sort = listQuery.Sort
-	} else {
-		sort = "id desc"
+	limit, offset := uitl.Page(req.Limit, req.Page) // 分页
+	sort := uitl.Sort(req.Sort)                     // 排序 默认 created_at desc
+	// 查询条件
+	if req.Where != "" {
+		db = db.Where(req.Where)
 	}
 	if err := db.Order(sort).Limit(limit).Offset(offset).Find(&permissions).Error; err != nil {
 		log.Log(err)
@@ -55,9 +52,13 @@ func (repo *PermissionRepository) List(listQuery *pb.ListQuery) (permissions []*
 }
 
 // Total 获取所有权限查询总量
-func (repo *PermissionRepository) Total(req *pb.Permission) (total int64, err error) {
+func (repo *PermissionRepository) Total(req *pb.ListQuery) (total int64, err error) {
 	permissions := []pb.Permission{}
 	db := repo.DB
+	// 查询条件
+	if req.Where != "" {
+		db = db.Where(req.Where)
+	}
 	if err := db.Find(&permissions).Count(&total).Error; err != nil {
 		log.Log(err)
 		return total, err
@@ -66,23 +67,11 @@ func (repo *PermissionRepository) Total(req *pb.Permission) (total int64, err er
 }
 
 // Get 获取权限信息
-func (repo *PermissionRepository) Get(p *pb.Permission) (*pb.Permission, error) {
-	if p.Id > 0 {
-		if err := repo.DB.Model(&p).Where("id = ?", p.Id).Find(&p).Error; err != nil {
-			return nil, err
-		}
+func (repo *PermissionRepository) Get(permission *pb.Permission) (*pb.Permission, error) {
+	if err := repo.DB.Where(&permission).Find(&permission).Error; err != nil {
+		return nil, err
 	}
-	if p.Service != "" && p.Method != "" {
-		if err := repo.DB.Model(&p).Where("service = ?", p.Service).Where("method = ?", p.Method).Find(&p).Error; err != nil {
-			return nil, err
-		}
-	}
-	if p.Name != "" {
-		if err := repo.DB.Model(&p).Where("name = ?", p.Name).Find(&p).Error; err != nil {
-			return nil, err
-		}
-	}
-	return p, nil
+	return permission, nil
 }
 
 // Create 创建权限

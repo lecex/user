@@ -32,8 +32,7 @@ message ListQuery{
     int64 limit=1;      //返回数量
     int64 page=2;       //页面
     string sort=3;      // 排序
-    string label = 4;
-    string name = 5;
+    string where = 4;       // 查询条件
 }
 message Request{
     ListQuery list_query = 1;           // 列表分页请求
