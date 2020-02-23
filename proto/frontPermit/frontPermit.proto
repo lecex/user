@@ -43,12 +43,12 @@ message ListQuery{
 
 message Request{
     ListQuery list_query = 1;           // 列表分页请求
-    FrontPermit frontPermit = 2;
+    FrontPermit front_permit = 2;
 }
 
 message Response{
     bool valid = 1;
     int64 total = 2;
-    FrontPermit frontPermit = 3;
-    repeated FrontPermit frontPermits = 4;
+    FrontPermit front_permit = 3;
+    repeated FrontPermit front_permits = 4;
 }
