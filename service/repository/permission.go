@@ -4,9 +4,8 @@ import (
 	"fmt"
 	// 公共引入
 	"github.com/jinzhu/gorm"
-	"github.com/micro/go-micro/v2/util/log"
 	"github.com/lecex/core/uitl"
-
+	"github.com/micro/go-micro/v2/util/log"
 
 	pb "github.com/lecex/user/proto/permission"
 )
@@ -37,7 +36,7 @@ func (repo *PermissionRepository) All(req *pb.Request) (permissions []*pb.Permis
 }
 
 // List 获取所有权限信息
-func (repo *PermissionRepository) List(listQuery *pb.ListQuery, per *pb.Permission) (permissions []*pb.Permission, err error) {
+func (repo *PermissionRepository) List(listQuery *pb.ListQuery) (permissions []*pb.Permission, err error) {
 	db := repo.DB
 	// 计算分页
 	limit, offset := uitl.Page(listQuery.Limit, listQuery.Page)
@@ -47,10 +46,6 @@ func (repo *PermissionRepository) List(listQuery *pb.ListQuery, per *pb.Permissi
 		sort = listQuery.Sort
 	} else {
 		sort = "id desc"
-	}
-	// 查询条件
-	if per.Name != "" {
-		db = db.Where("name like ?", "%"+per.Name+"%")
 	}
 	if err := db.Order(sort).Limit(limit).Offset(offset).Find(&permissions).Error; err != nil {
 		log.Log(err)
@@ -63,10 +58,6 @@ func (repo *PermissionRepository) List(listQuery *pb.ListQuery, per *pb.Permissi
 func (repo *PermissionRepository) Total(req *pb.Permission) (total int64, err error) {
 	permissions := []pb.Permission{}
 	db := repo.DB
-	// 查询条件
-	if req.Name != "" {
-		db = db.Where("name like ?", "%"+req.Name+"%")
-	}
 	if err := db.Find(&permissions).Count(&total).Error; err != nil {
 		log.Log(err)
 		return total, err
