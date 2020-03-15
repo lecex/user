@@ -46,6 +46,9 @@ func (srv *Handler) Wrapper(fn server.HandlerFunc) server.HandlerFunc {
 
 				// 设置用户 id
 				meta["Userid"] = authRes.User.Id
+				meta["Username"] = authRes.User.Username
+				meta["Email"] = authRes.User.Email
+				meta["Mobile"] = authRes.User.Mobile
 				meta["Service"] = req.Service()
 				meta["Method"] = req.Method()
 				ctx = metadata.NewContext(ctx, meta)

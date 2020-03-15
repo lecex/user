@@ -9,7 +9,7 @@ import (
 
 	pb "github.com/lecex/user/proto/auth"
 	userPb "github.com/lecex/user/proto/user"
-	
+
 	"github.com/lecex/user/service"
 	"github.com/lecex/user/service/repository"
 )
@@ -65,6 +65,9 @@ func (srv *Auth) Auth(ctx context.Context, req *pb.Request, res *pb.Response) (e
 			return errors.New("密码错误")
 		}
 		req.User.Id = user.Id
+		req.User.Username = user.Username
+		req.User.Email = user.Email
+		req.User.Mobile = user.Mobile
 		t, err := srv.TokenService.Encode(req.User)
 		if err != nil {
 			log.Log(err)
