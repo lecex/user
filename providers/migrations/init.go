@@ -12,10 +12,10 @@ import (
 	rolePB "github.com/lecex/user/proto/role"
 	userPB "github.com/lecex/user/proto/user"
 
-	db "github.com/lecex/user/providers/database"
 	"github.com/lecex/user/handler"
-	"github.com/lecex/user/service/repository"
 	"github.com/lecex/user/providers/casbin"
+	db "github.com/lecex/user/providers/database"
+	"github.com/lecex/user/service/repository"
 )
 
 func init() {
@@ -43,7 +43,8 @@ func user() {
 			origin varchar(32) DEFAULT NULL,
 			created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-			PRIMARY KEY (id)
+			PRIMARY KEY (id),
+			UNIQUE KEY username (username)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		`)
 	}
