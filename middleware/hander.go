@@ -72,7 +72,7 @@ func (srv *Handler) Wrapper(fn server.HandlerFunc) server.HandlerFunc {
 // IsAuth 检测用户授权
 func (srv *Handler) IsAuth(req server.Request) bool {
 	for _, p := range srv.Permissions {
-		if p.Service == req.Service() && p.Method == req.Method() && p.Auth == true {
+		if p.Method == req.Method() && p.Auth == true {
 			return true
 		}
 	}
@@ -82,7 +82,7 @@ func (srv *Handler) IsAuth(req server.Request) bool {
 // IsPolicy 检查用户权限
 func (srv *Handler) IsPolicy(req server.Request) bool {
 	for _, p := range srv.Permissions {
-		if p.Service == req.Service() && p.Method == req.Method() && p.Policy == true {
+		if p.Method == req.Method() && p.Policy == true {
 			return true
 		}
 	}
