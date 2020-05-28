@@ -19,6 +19,7 @@ import (
 type Handler struct {
 	UserService string
 	Permissions []*PB.Permission
+	Service     string
 }
 
 // Wrapper 是一个高阶函数，入参是 ”下一步“ 函数，出参是认证函数
@@ -43,13 +44,12 @@ func (srv *Handler) Wrapper(fn server.HandlerFunc) server.HandlerFunc {
 				if err != nil || authRes.Valid == false {
 					return err
 				}
-
 				// 设置用户 id
 				meta["Userid"] = authRes.User.Id
 				meta["Username"] = authRes.User.Username
 				meta["Email"] = authRes.User.Email
 				meta["Mobile"] = authRes.User.Mobile
-				meta["Service"] = req.Service()
+				meta["Service"] = srv.Service
 				meta["Method"] = req.Method()
 				ctx = metadata.NewContext(ctx, meta)
 				if srv.IsPolicy(req) {
@@ -73,6 +73,7 @@ func (srv *Handler) Wrapper(fn server.HandlerFunc) server.HandlerFunc {
 func (srv *Handler) IsAuth(req server.Request) bool {
 	for _, p := range srv.Permissions {
 		if p.Method == req.Method() && p.Auth == true {
+			srv.Service = p.Service
 			return true
 		}
 	}

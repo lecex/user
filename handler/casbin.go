@@ -52,7 +52,7 @@ func (srv *Casbin) UpdatePermissions(ctx context.Context, req *pb.Request, res *
 
 // GetPermissions 获取权限
 func (srv *Casbin) GetPermissions(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
-	srv.Enforcer.LoadPolicy() // 重新新加载配置
+	srv.Enforcer.LoadPolicy() // 加载最新配置
 	permissions := srv.Enforcer.GetPermissionsForUser(req.Role)
 	for _, permission := range permissions {
 		res.Permissions = append(res.Permissions, &pb.Permission{
@@ -102,14 +102,14 @@ func (srv *Casbin) UpdateRoles(ctx context.Context, req *pb.Request, res *pb.Res
 
 // GetRoles 获取权限
 func (srv *Casbin) GetRoles(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
-	srv.Enforcer.LoadPolicy() // 重新新加载配置
+	srv.Enforcer.LoadPolicy() // 加载最新配置
 	res.Roles, err = srv.Enforcer.GetRolesForUser(req.Label)
 	return err
 }
 
 // Validate 验证权限
 func (srv *Casbin) Validate(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
-	srv.Enforcer.LoadPolicy() // 重新新加载配置
+	srv.Enforcer.LoadPolicy() // 加载最新配置
 	meta, ok := metadata.FromContext(ctx)
 	if !ok {
 		return errors.New("no auth meta-data found in request")
