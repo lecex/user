@@ -81,9 +81,9 @@ func TestUserCreate(t *testing.T) {
 func TestUserIsExist(t *testing.T) {
 	req := &userPB.Request{
 		User: &userPB.User{
-			Username: `bvbv0115`,
-			Mobile:   `13953186115`,
-			Email:    `bvbv0a115@qq.com`,
+			// Username: `bvbv0115`,
+			// Mobile:   `13953186115`,
+			// Email:    `bvbv0a115@qq.com`,
 		},
 	}
 	res := &userPB.Response{}

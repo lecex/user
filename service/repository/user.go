@@ -30,11 +30,9 @@ type UserRepository struct {
 // Exist 检测用户是否已经存在
 func (repo *UserRepository) Exist(user *pb.User) bool {
 	var count int
-	if user.Username != "" {
-		repo.DB.Model(&user).Where("(username = ? AND username != '') OR (mobile = ? AND mobile != '') OR (email = ? AND email != '')", user.Username, user.Mobile, user.Email).Count(&count)
-		if count > 0 {
-			return true
-		}
+	repo.DB.Model(&user).Where("(username = ? AND username != '') OR (mobile = ? AND mobile != '') OR (email = ? AND email != '')", user.Username, user.Mobile, user.Email).Count(&count)
+	if count > 0 {
+		return true
 	}
 	return false
 }
