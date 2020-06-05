@@ -31,19 +31,7 @@ type UserRepository struct {
 func (repo *UserRepository) Exist(user *pb.User) bool {
 	var count int
 	if user.Username != "" {
-		repo.DB.Model(&user).Where("username = ?", user.Username).Count(&count)
-		if count > 0 {
-			return true
-		}
-	}
-	if user.Mobile != "" {
-		repo.DB.Model(&user).Where("mobile = ?", user.Mobile).Count(&count)
-		if count > 0 {
-			return true
-		}
-	}
-	if user.Email != "" {
-		repo.DB.Model(&user).Where("email = ?", user.Email).Count(&count)
+		repo.DB.Model(&user).Where("(username = ? AND username != '') OR (mobile = ? AND mobile != '') OR (email = ? AND email != '')", user.Username, user.Mobile, user.Email).Count(&count)
 		if count > 0 {
 			return true
 		}
