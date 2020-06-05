@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"testing"
 
 	_ "github.com/lecex/user/providers/migrations"
@@ -81,16 +80,16 @@ func TestUserCreate(t *testing.T) {
 func TestUserIsExist(t *testing.T) {
 	req := &userPB.Request{
 		User: &userPB.User{
-			// Username: `bvbv0115`,
-			// Mobile:   `13953186115`,
-			// Email:    `bvbv0a115@qq.com`,
+			Username: `bvbv0115`,
+			Mobile:   `13953186115`,
+			Email:    `bvbv0a115@qq.com`,
 		},
 	}
 	res := &userPB.Response{}
 	handler := &handler.Handler{}
 	h := handler.User()
 	err := h.Exist(context.TODO(), req, res)
-	fmt.Println("exist", req, res.Valid, err)
+	// fmt.Println("exist", req, res.Valid, err)
 	t.Log(req, res, err)
 }
 func TestUserGet(t *testing.T) {
