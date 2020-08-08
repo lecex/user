@@ -3,9 +3,9 @@ package database
 import (
 	"github.com/micro/go-micro/v2/util/log"
 
+	"github.com/jinzhu/gorm"
 	"github.com/lecex/core/env"
 	tgorm "github.com/lecex/core/gorm"
-	"github.com/jinzhu/gorm"
 )
 
 // DB 管理包
