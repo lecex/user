@@ -5,13 +5,16 @@ import (
 	"testing"
 
 	_ "github.com/lecex/user/providers/migrations"
+	"github.com/lecex/user/service"
 
+	handler "github.com/lecex/user/handler"
 	authPB "github.com/lecex/user/proto/auth"
 	frontPermitPB "github.com/lecex/user/proto/frontPermit"
 	permissionPB "github.com/lecex/user/proto/permission"
 	userPB "github.com/lecex/user/proto/user"
+	db "github.com/lecex/user/providers/database"
 
-	"github.com/lecex/user/handler"
+	"github.com/lecex/user/service/repository"
 )
 
 func TestFrontPermitUpdateOrCreate(t *testing.T) {
@@ -21,8 +24,7 @@ func TestFrontPermitUpdateOrCreate(t *testing.T) {
 		},
 	}
 	res := &frontPermitPB.Response{}
-	handler := &handler.Handler{}
-	h := handler.FrontPermit()
+	h := handler.FrontPermit{&repository.FrontPermitRepository{db.DB}}
 	err := h.UpdateOrCreate(context.TODO(), req, res)
 	// fmt.Println(req, res, err)
 	t.Log(req, res, err)
@@ -38,8 +40,7 @@ func TestPermissionsSync(t *testing.T) {
 		},
 	}
 	res := &permissionPB.Response{}
-	handler := &handler.Handler{}
-	h := handler.Permission()
+	h := handler.Permission{&repository.PermissionRepository{db.DB}}
 	err := h.Sync(context.TODO(), req, res)
 	// fmt.Println(req, res, err)
 	t.Log(req, res, err)
@@ -51,8 +52,7 @@ func TestPermissionsUpdateOrCreate(t *testing.T) {
 		},
 	}
 	res := &permissionPB.Response{}
-	handler := &handler.Handler{}
-	h := handler.Permission()
+	h := handler.Permission{&repository.PermissionRepository{db.DB}}
 	err := h.UpdateOrCreate(context.TODO(), req, res)
 	// fmt.Println(req, res, err)
 	t.Log(req, res, err)
@@ -70,8 +70,7 @@ func TestUserCreate(t *testing.T) {
 		},
 	}
 	res := &userPB.Response{}
-	handler := &handler.Handler{}
-	h := handler.User()
+	h := handler.User{&repository.UserRepository{db.DB}}
 	err := h.Create(context.TODO(), req, res)
 	// fmt.Println(req, res, err)
 	t.Log(req, res, err)
@@ -86,8 +85,7 @@ func TestUserIsExist(t *testing.T) {
 		},
 	}
 	res := &userPB.Response{}
-	handler := &handler.Handler{}
-	h := handler.User()
+	h := handler.User{&repository.UserRepository{db.DB}}
 	err := h.Exist(context.TODO(), req, res)
 	// fmt.Println("exist", req, res.Valid, err)
 	t.Log(req, res, err)
@@ -99,8 +97,7 @@ func TestUserGet(t *testing.T) {
 		},
 	}
 	res := &userPB.Response{}
-	handler := &handler.Handler{}
-	h := handler.User()
+	h := handler.User{&repository.UserRepository{db.DB}}
 	err := h.Get(context.TODO(), req, res)
 	// fmt.Println("UserGet", res, err)
 	t.Log(req, res, err)
@@ -115,8 +112,7 @@ func TestUserList(t *testing.T) {
 		},
 	}
 	res := &userPB.Response{}
-	handler := &handler.Handler{}
-	h := handler.User()
+	h := handler.User{&repository.UserRepository{db.DB}}
 	err := h.List(context.TODO(), req, res)
 	// fmt.Println("UserList", res, err)
 	t.Log(req, res, err)
@@ -143,8 +139,7 @@ func TestUserDelete(t *testing.T) {
 		},
 	}
 	res := &userPB.Response{}
-	handler := &handler.Handler{}
-	h := handler.User()
+	h := handler.User{&repository.UserRepository{db.DB}}
 	err := h.Delete(context.TODO(), req, res)
 	// fmt.Println("UserDelete", req, res, err)
 	t.Log(req, res, err)
@@ -159,8 +154,7 @@ func TestAuth(t *testing.T) {
 		},
 	}
 	res := &authPB.Response{}
-	handler := &handler.Handler{}
-	h := handler.Auth()
+	h := handler.Auth{&service.TokenService{}, &repository.UserRepository{db.DB}}
 	err := h.Auth(context.TODO(), req, res)
 	// fmt.Println(req, res, err)
 	t.Log(req, res, err)
@@ -173,8 +167,7 @@ func TestAuthById(t *testing.T) {
 		},
 	}
 	res := &authPB.Response{}
-	handler := &handler.Handler{}
-	h := handler.Auth()
+	h := handler.Auth{&service.TokenService{}, &repository.UserRepository{db.DB}}
 	err := h.AuthById(context.TODO(), req, res)
 	// fmt.Println(req, res, err)
 	t.Log(req, res, err)
@@ -185,8 +178,7 @@ func TestValidateToken(t *testing.T) {
 		Token: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyIjp7ImlkIjoiYzBhODNiMjQtYzAxYy00NjAxLWExYzYtMTdlM2MxODY0YzVhIn0sImV4cCI6MTU3MDM0OTc2MCwiaXNzIjoidXNlciJ9.Y3l55bE3StZL66RPbrTk8zVgUZBll0Pc6yV6ljb22k4`,
 	}
 	res := &authPB.Response{}
-	handler := &handler.Handler{}
-	h := handler.Auth()
+	h := handler.Auth{&service.TokenService{}, &repository.UserRepository{db.DB}}
 	err := h.ValidateToken(context.TODO(), req, res)
 	// fmt.Println(req, res, err)
 	t.Log(req, res, err)

@@ -2,9 +2,9 @@ package main
 
 import (
 	// 公共引入
+	_ "github.com/lecex/core/plugins"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/util/log"
-	_ "github.com/micro/go-plugins/registry/nats/v2"
 
 	// 执行数据迁移
 	"github.com/lecex/user/config"
@@ -20,10 +20,7 @@ func main() {
 	)
 	service.Init()
 	// 注册服务
-	h := handler.Handler{
-		Server: service.Server(),
-	}
-	h.Register()
+	handler.Register(service.Server())
 	// Run the server
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
