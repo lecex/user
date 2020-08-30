@@ -2,14 +2,13 @@ package main
 
 import (
 	// 公共引入
-	_ "github.com/lecex/core/plugins"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/util/log"
 
-	// 执行数据迁移
+	_ "github.com/lecex/core/plugins" // 插件在后面执行
 	"github.com/lecex/user/config"
 	"github.com/lecex/user/handler"
-	_ "github.com/lecex/user/providers/migrations"
+	_ "github.com/lecex/user/providers/migrations" // 执行数据迁移
 )
 
 func main() {
