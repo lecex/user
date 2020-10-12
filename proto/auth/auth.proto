@@ -21,6 +21,9 @@ message User {
     string mobile = 3;
     string email = 4;
     string password = 5;
+    string name = 6;
+    string avatar = 7;
+    string origin = 8;                      //用户注册来源
 }
 
 message Request {

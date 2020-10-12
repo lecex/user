@@ -38,6 +38,16 @@ func (srv *Auth) AuthById(ctx context.Context, req *pb.Request, res *pb.Response
 			return err
 		}
 		res.Token = t
+
+		res.User = &pb.User{
+			Id:       user.Id,
+			Username: user.Username,
+			Mobile:   user.Mobile,
+			Email:    user.Email,
+			Name:     user.Name,
+			Avatar:   user.Avatar,
+			Origin:   user.Origin,
+		}
 	}
 	return nil
 }
@@ -74,6 +84,15 @@ func (srv *Auth) Auth(ctx context.Context, req *pb.Request, res *pb.Response) (e
 			return err
 		}
 		res.Token = t
+		res.User = &pb.User{
+			Id:       user.Id,
+			Username: user.Username,
+			Mobile:   user.Mobile,
+			Email:    user.Email,
+			Name:     user.Name,
+			Avatar:   user.Avatar,
+			Origin:   user.Origin,
+		}
 	}
 	return nil
 }
