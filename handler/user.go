@@ -54,7 +54,7 @@ func (srv *User) Create(ctx context.Context, req *pb.Request, res *pb.Response) 
 	user, err := srv.Repo.Create(req.User)
 	if err != nil {
 		res.Valid = false
-		return fmt.Errorf("创建用户失败")
+		return fmt.Errorf("创建用户失败: %s", err)
 	}
 	res.User = user
 	res.Valid = true
