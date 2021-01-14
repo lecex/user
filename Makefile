@@ -11,6 +11,8 @@ rpc:
 .PHONY: api
 api:
 	micro api  --handler=api  --namespace=go.micro.api --address=:8081
+micro:
+	micro api --enable_rpc=true
 
 .PHONY: proto
 proto:
