@@ -143,7 +143,7 @@ func CreateUser() {
 		User: &userPB.User{
 			Username: `admin`,
 			Password: password,
-			Origin:   `user`,
+			Origin:   `User`,
 		},
 	}
 	res := &userPB.Response{}
