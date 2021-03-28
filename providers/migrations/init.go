@@ -23,7 +23,7 @@ func init() {
 	frontPermit()
 	permission()
 	role()
-	logs()
+	// logs()
 
 	seeds()
 }
@@ -113,22 +113,22 @@ func role() {
 	}
 }
 
-// logs 日志
-func logs() {
-	log := &rolePB.Log{}
-	if !db.DB.HasTable(&log) {
-		db.DB.Exec(`
-			CREATE TABLE logs (
-			id int(11) unsigned NOT NULL AUTO_INCREMENT,
-			user_id varchar(36) NOT NULL,
-			service varchar(64) DEFAULT NULL,
-			method varchar(64) DEFAULT NULL,
-			created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			PRIMARY KEY (id)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-		`)
-	}
-}
+// // logs 日志
+// func logs() {
+// 	log := &rolePB.Log{}
+// 	if !db.DB.HasTable(&log) {
+// 		db.DB.Exec(`
+// 			CREATE TABLE logs (
+// 			id int(11) unsigned NOT NULL AUTO_INCREMENT,
+// 			user_id varchar(36) NOT NULL,
+// 			service varchar(64) DEFAULT NULL,
+// 			method varchar(64) DEFAULT NULL,
+// 			created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+// 			PRIMARY KEY (id)
+// 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+// 		`)
+// 	}
+// }
 
 func seeds() {
 	CreateRole()
