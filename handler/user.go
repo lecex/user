@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"fmt"
+	"github.com/micro/go-micro/v2/util/log"
 
 	pb "github.com/lecex/user/proto/user"
 	"github.com/lecex/user/service/repository"
@@ -26,6 +27,7 @@ func (srv *User) List(ctx context.Context, req *pb.Request, res *pb.Response) (e
 	users, err := srv.Repo.List(req.ListQuery)
 	total, err := srv.Repo.Total(req.ListQuery)
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 	res.Total = total
@@ -37,6 +39,7 @@ func (srv *User) List(ctx context.Context, req *pb.Request, res *pb.Response) (e
 func (srv *User) Get(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
 	user, err := srv.Repo.Get(req.User)
 	if err != nil {
+		log.Log(err)
 		return err
 	}
 	res.User = user
@@ -53,6 +56,7 @@ func (srv *User) Create(ctx context.Context, req *pb.Request, res *pb.Response) 
 	req.User.Password = string(hashedPass)
 	user, err := srv.Repo.Create(req.User)
 	if err != nil {
+		log.Log(err)
 		res.Valid = false
 		return fmt.Errorf("创建用户失败: %s", err)
 	}
@@ -67,12 +71,14 @@ func (srv *User) Update(ctx context.Context, req *pb.Request, res *pb.Response) 
 	if req.User.Password != "" {
 		hashedPass, err := bcrypt.GenerateFromPassword([]byte(req.User.Password), bcrypt.DefaultCost)
 		if err != nil {
+			log.Log(err)
 			return err
 		}
 		req.User.Password = string(hashedPass)
 	}
 	valid, err := srv.Repo.Update(req.User)
 	if err != nil {
+		log.Log(err)
 		res.Valid = false
 		return fmt.Errorf("更新用户失败")
 	}
@@ -84,6 +90,7 @@ func (srv *User) Update(ctx context.Context, req *pb.Request, res *pb.Response) 
 func (srv *User) Delete(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
 	valid, err := srv.Repo.Delete(req.User)
 	if err != nil {
+		log.Log(err)
 		res.Valid = false
 		return fmt.Errorf("删除用户失败")
 	}

@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package log;
+
+service Logs {
+    // 获取日志列表
+    rpc List(Request) returns (Response) {}
+    // 根据 唯一 获取日志
+    rpc Get(Request) returns (Response) {}
+    // 创建日志
+    rpc Create(Request) returns (Response) {}
+
+    rpc Delete(Request) returns (Response) {}
+}
+
+message User {
+    string id = 1;
+    string username = 2;
+    string mobile = 3;
+    string email = 4;
+    string name = 5;
+    string avatar = 6;
+    string origin = 7; //用户注册来源
+}
+
+message Log {
+    string id = 1;
+    string user_id = 2;
+    string service = 3;
+    string method = 4;
+    string updated_at = 5;
+    User user = 6;
+}
+
+
+message ListQuery{
+    int64 limit=1;          // 返回数量
+    int64 page=2;           // 页面
+    string sort=3;          // 排序
+    string where = 4;       // 查询条件
+}
+message Request {
+    ListQuery list_query = 1;           // 列表分页请求
+    Log log = 2;                      // 日志
+}
+
+message Response {
+    bool valid = 1;
+    int64 total = 2;
+    Log log = 3;
+    repeated Log logs = 4;
+}

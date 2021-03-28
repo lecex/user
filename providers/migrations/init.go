@@ -23,6 +23,7 @@ func init() {
 	frontPermit()
 	permission()
 	role()
+	logs()
 
 	seeds()
 }
@@ -107,6 +108,23 @@ func role() {
 			updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			PRIMARY KEY (id),
 			UNIQUE KEY label (label)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		`)
+	}
+}
+
+// logs 日志
+func logs() {
+	log := &rolePB.Log{}
+	if !db.DB.HasTable(&log) {
+		db.DB.Exec(`
+			CREATE TABLE logs (
+			id int(11) unsigned NOT NULL AUTO_INCREMENT,
+			user_id varchar(36) NOT NULL,
+			service varchar(64) DEFAULT NULL,
+			method varchar(64) DEFAULT NULL,
+			created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY (id)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		`)
 	}
