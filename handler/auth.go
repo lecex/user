@@ -52,6 +52,38 @@ func (srv *Auth) AuthById(ctx context.Context, req *pb.Request, res *pb.Response
 	return nil
 }
 
+// AuthByMobile 只通过 Mobile 获取 jwt token
+// bug 只能服务之间调用如果前端调用会不验证获取权限
+func (srv *Auth) AuthByMobile(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {
+	user, err := srv.Repo.Get(&userPb.User{
+		Id: req.User.Mobile,
+	})
+	if err != nil {
+		log.Log(err)
+		return err
+	}
+	if user != nil {
+		req.User.Id = user.Id
+		t, err := srv.TokenService.Encode(req.User)
+		if err != nil {
+			log.Log(err)
+			return err
+		}
+		res.Token = t
+
+		res.User = &pb.User{
+			Id:       user.Id,
+			Username: user.Username,
+			Mobile:   user.Mobile,
+			Email:    user.Email,
+			Name:     user.Name,
+			Avatar:   user.Avatar,
+			Origin:   user.Origin,
+		}
+	}
+	return nil
+}
+
 // Auth 授权认证
 // 返回token
 func (srv *Auth) Auth(ctx context.Context, req *pb.Request, res *pb.Response) (err error) {

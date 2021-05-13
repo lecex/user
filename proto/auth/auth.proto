@@ -11,7 +11,7 @@ service Auth {
     // 只限微服务之间调用
     // 根据用户ID获取授权
     rpc AuthById(Request) returns (Response) {}
-    
+    rpc AuthByMobile(Request) returns (Response) {}
 
 }
 

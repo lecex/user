@@ -41,6 +41,7 @@ type AuthService interface {
 	// 只限微服务之间调用
 	// 根据用户ID获取授权
 	AuthById(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
+	AuthByMobile(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 }
 
 type authService struct {
@@ -85,6 +86,16 @@ func (c *authService) AuthById(ctx context.Context, in *Request, opts ...client.
 	return out, nil
 }
 
+func (c *authService) AuthByMobile(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "Auth.AuthByMobile", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Auth service
 
 type AuthHandler interface {
@@ -95,6 +106,7 @@ type AuthHandler interface {
 	// 只限微服务之间调用
 	// 根据用户ID获取授权
 	AuthById(context.Context, *Request, *Response) error
+	AuthByMobile(context.Context, *Request, *Response) error
 }
 
 func RegisterAuthHandler(s server.Server, hdlr AuthHandler, opts ...server.HandlerOption) error {
@@ -102,6 +114,7 @@ func RegisterAuthHandler(s server.Server, hdlr AuthHandler, opts ...server.Handl
 		Auth(ctx context.Context, in *Request, out *Response) error
 		ValidateToken(ctx context.Context, in *Request, out *Response) error
 		AuthById(ctx context.Context, in *Request, out *Response) error
+		AuthByMobile(ctx context.Context, in *Request, out *Response) error
 	}
 	type Auth struct {
 		auth
@@ -124,4 +137,8 @@ func (h *authHandler) ValidateToken(ctx context.Context, in *Request, out *Respo
 
 func (h *authHandler) AuthById(ctx context.Context, in *Request, out *Response) error {
 	return h.AuthHandler.AuthById(ctx, in, out)
+}
+
+func (h *authHandler) AuthByMobile(ctx context.Context, in *Request, out *Response) error {
+	return h.AuthHandler.AuthByMobile(ctx, in, out)
 }
