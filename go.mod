@@ -6,12 +6,11 @@ require (
 	github.com/casbin/casbin v1.9.1
 	github.com/casbin/gorm-adapter v1.0.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/go-sql-driver/mysql v1.5.0
-	github.com/gogo/protobuf v1.3.1
-	github.com/golang/protobuf v1.4.2
-	github.com/jinzhu/gorm v1.9.12
-	github.com/lecex/core v1.1.3
+	github.com/go-sql-driver/mysql v1.6.0
+	github.com/gogo/protobuf v1.3.2
+	github.com/golang/protobuf v1.5.2
+	github.com/jinzhu/gorm v1.9.16
+	github.com/lecex/core v1.1.5
 	github.com/micro/go-micro/v2 v2.3.0
-	github.com/satori/go.uuid v1.2.0
-	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37
+	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a
 )
