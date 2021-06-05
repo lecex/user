@@ -4,7 +4,7 @@ import (
 	"fmt"
 	// 公共引入
 	"github.com/jinzhu/gorm"
-	"github.com/lecex/core/uitl"
+	"github.com/lecex/core/util"
 	"github.com/micro/go-micro/v2/util/log"
 
 	pb "github.com/lecex/user/proto/permission"
@@ -38,8 +38,8 @@ func (repo *PermissionRepository) All(req *pb.Request) (permissions []*pb.Permis
 // List 获取所有权限信息
 func (repo *PermissionRepository) List(req *pb.ListQuery) (permissions []*pb.Permission, err error) {
 	db := repo.DB
-	limit, offset := uitl.Page(req.Limit, req.Page) // 分页
-	sort := uitl.Sort(req.Sort)                     // 排序 默认 created_at desc
+	limit, offset := util.Page(req.Limit, req.Page) // 分页
+	sort := util.Sort(req.Sort)                     // 排序 默认 created_at desc
 	// 查询条件
 	if req.Where != "" {
 		db = db.Where(req.Where)
