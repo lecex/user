@@ -1,8 +1,6 @@
 package handler
 
 import (
-	server "github.com/micro/go-micro/v2/server"
-
 	db "github.com/lecex/user/providers/database"
 
 	authPB "github.com/lecex/user/proto/auth"
@@ -15,14 +13,19 @@ import (
 	"github.com/lecex/user/providers/casbin"
 	"github.com/lecex/user/service"
 	"github.com/lecex/user/service/repository"
+	"github.com/micro/go-micro/v2"
 )
 
+const topic = "event"
+
 // Register 注册
-func Register(Server server.Server) {
-	userPB.RegisterUsersHandler(Server, &User{&repository.UserRepository{db.DB}})                             // 用户服务实现
-	authPB.RegisterAuthHandler(Server, &Auth{&service.TokenService{}, &repository.UserRepository{db.DB}})     // token 服务实现
-	frontPermitPB.RegisterFrontPermitsHandler(Server, &FrontPermit{&repository.FrontPermitRepository{db.DB}}) // 前端权限服务实现
-	permissionPB.RegisterPermissionsHandler(Server, &Permission{&repository.PermissionRepository{db.DB}})     // 权限服务实现
-	rolePB.RegisterRolesHandler(Server, &Role{&repository.RoleRepository{db.DB}})                             // 角色服务实现
-	casbinPB.RegisterCasbinHandler(Server, &Casbin{casbin.Enforcer})                                          // 权限管理服务实现
+func Register(srv micro.Service) {
+	server := srv.Server()
+	publisher := micro.NewPublisher(topic, srv.Client())
+	userPB.RegisterUsersHandler(server, &User{&repository.UserRepository{db.DB}, publisher})                  // 用户服务实现
+	authPB.RegisterAuthHandler(server, &Auth{&service.TokenService{}, &repository.UserRepository{db.DB}})     // token 服务实现
+	frontPermitPB.RegisterFrontPermitsHandler(server, &FrontPermit{&repository.FrontPermitRepository{db.DB}}) // 前端权限服务实现
+	permissionPB.RegisterPermissionsHandler(server, &Permission{&repository.PermissionRepository{db.DB}})     // 权限服务实现
+	rolePB.RegisterRolesHandler(server, &Role{&repository.RoleRepository{db.DB}})                             // 角色服务实现
+	casbinPB.RegisterCasbinHandler(server, &Casbin{casbin.Enforcer})                                          // 权限管理服务实现
 }

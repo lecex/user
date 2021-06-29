@@ -156,7 +156,7 @@ func CreateRole() {
 func CreateUser() {
 	password := env.Getenv("ADMIN_PASSWORD", "admin123")
 	repo := &repository.UserRepository{db.DB}
-	h := handler.User{repo}
+	h := handler.User{repo, nil}
 	req := &userPB.Request{
 		User: &userPB.User{
 			Username: `admin`,

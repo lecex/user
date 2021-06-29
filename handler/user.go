@@ -2,18 +2,23 @@ package handler
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+
+	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/util/log"
 
 	pb "github.com/lecex/user/proto/user"
 	"github.com/lecex/user/service/repository"
 
+	eventPB "github.com/lecex/core/proto/event"
 	"golang.org/x/crypto/bcrypt"
 )
 
 // User 用户结构
 type User struct {
-	Repo repository.User
+	Repo      repository.User
+	Publisher micro.Publisher
 }
 
 // Exist 用户是否存在
@@ -94,6 +99,31 @@ func (srv *User) Delete(ctx context.Context, req *pb.Request, res *pb.Response) 
 		res.Valid = false
 		return fmt.Errorf("删除用户失败")
 	}
+	if valid {
+		if err := srv.publish(ctx, req.User, "user_delete"); err != nil {
+			return err
+		}
+	}
 	res.Valid = valid
 	return err
+}
+
+// publish 消息发布
+func (srv *User) publish(ctx context.Context, user *pb.User, topic string) (err error) {
+	if srv.Publisher != nil {
+		u, err := srv.Repo.Get(user)
+		if err != nil {
+			return err
+		}
+		data, _ := json.Marshal(&u)
+		event := &eventPB.Event{
+			UserId:     "",
+			DeviceInfo: "",
+			GroupId:    "",
+			Topic:      topic,
+			Data:       data,
+		}
+		return srv.Publisher.Publish(ctx, event)
+	}
+	return
 }
