@@ -100,7 +100,7 @@ func (srv *User) Delete(ctx context.Context, req *pb.Request, res *pb.Response) 
 		return fmt.Errorf("删除用户失败")
 	}
 	if valid {
-		if err := srv.publish(ctx, req.User, "user_delete"); err != nil {
+		if err := srv.publish(ctx, req.User, "user.delete"); err != nil {
 			return err
 		}
 	}
