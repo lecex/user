@@ -100,7 +100,7 @@ func (srv *User) Delete(ctx context.Context, req *pb.Request, res *pb.Response) 
 		return fmt.Errorf("删除用户失败")
 	}
 	if valid {
-		if err := srv.publish(ctx, req.User, "user.delete"); err != nil {
+		if err := srv.publish(ctx, req.User, "user.Users.Delete"); err != nil {
 			return err
 		}
 	}
@@ -111,11 +111,7 @@ func (srv *User) Delete(ctx context.Context, req *pb.Request, res *pb.Response) 
 // publish 消息发布
 func (srv *User) publish(ctx context.Context, user *pb.User, topic string) (err error) {
 	if srv.Publisher != nil {
-		u, err := srv.Repo.Get(user)
-		if err != nil {
-			return err
-		}
-		data, _ := json.Marshal(&u)
+		data, _ := json.Marshal(&user)
 		event := &eventPB.Event{
 			UserId:     "",
 			DeviceInfo: "",

@@ -91,10 +91,7 @@ func (repo *PermissionRepository) Update(p *pb.Permission) (bool, error) {
 	if p.Id == 0 {
 		return false, fmt.Errorf("请传入更新id")
 	}
-	id := &pb.Permission{
-		Id: p.Id,
-	}
-	err := repo.DB.Model(id).Updates(p).Error
+	err := repo.DB.Where("id = ?", p.Id).Updates(p).Error
 	if err != nil {
 		log.Log(err)
 		return false, err
@@ -104,7 +101,10 @@ func (repo *PermissionRepository) Update(p *pb.Permission) (bool, error) {
 
 // Delete 删除权限
 func (repo *PermissionRepository) Delete(p *pb.Permission) (bool, error) {
-	err := repo.DB.Delete(p).Error
+	if p.Id == 0 {
+		return false, fmt.Errorf("请传入更新id")
+	}
+	err := repo.DB.Where("id = ?", p.Id).Delete(p).Error
 	if err != nil {
 		log.Log(err)
 		return false, err

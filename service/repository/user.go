@@ -95,10 +95,7 @@ func (repo *UserRepository) Update(user *pb.User) (bool, error) {
 	if user.Id == "" {
 		return false, fmt.Errorf("请传入更新id")
 	}
-	id := &pb.User{
-		Id: user.Id,
-	}
-	err := repo.DB.Model(id).Updates(user).Error
+	err := repo.DB.Where("id = ?", user.Id).Updates(user).Error
 	if err != nil {
 		log.Log(err)
 		return false, err
@@ -108,10 +105,10 @@ func (repo *UserRepository) Update(user *pb.User) (bool, error) {
 
 // Delete 删除用户
 func (repo *UserRepository) Delete(user *pb.User) (bool, error) {
-	id := &pb.User{
-		Id: user.Id,
+	if user.Id == "" {
+		return false, fmt.Errorf("请传入更新id")
 	}
-	err := repo.DB.Delete(id).Error
+	err := repo.DB.Where("id = ?", user.Id).Delete(user).Error
 	if err != nil {
 		log.Log(err)
 		return false, err
