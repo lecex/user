@@ -91,7 +91,7 @@ func (repo *FrontPermitRepository) Update(p *pb.FrontPermit) (bool, error) {
 	if p.Id == 0 {
 		return false, fmt.Errorf("请传入更新id")
 	}
-	err := repo.DB.Where("id = ?", p.Id).Updates(p).Error
+	err := repo.DB.Model(&p).Where("id = ?", p.Id).Updates(p).Error
 	if err != nil {
 		log.Log(err)
 		return false, err
@@ -104,7 +104,7 @@ func (repo *FrontPermitRepository) Delete(p *pb.FrontPermit) (bool, error) {
 	if p.Id == 0 {
 		return false, fmt.Errorf("请传入更新id")
 	}
-	err := repo.DB.Where("id = ?", p.Id).Delete(p).Error
+	err := repo.DB.Model(&p).Where("id = ?", p.Id).Delete(p).Error
 	if err != nil {
 		log.Log(err)
 		return false, err

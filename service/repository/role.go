@@ -91,7 +91,7 @@ func (repo *RoleRepository) Update(r *pb.Role) (bool, error) {
 	if r.Id == 0 {
 		return false, fmt.Errorf("请传入更新id")
 	}
-	err := repo.DB.Where("id = ?", r.Id).Updates(r).Error
+	err := repo.DB.Model(&r).Where("id = ?", r.Id).Updates(r).Error
 	if err != nil {
 		log.Log(err)
 		return false, err
@@ -104,7 +104,7 @@ func (repo *RoleRepository) Delete(r *pb.Role) (bool, error) {
 	if r.Id == 0 {
 		return false, fmt.Errorf("请传入更新id")
 	}
-	err := repo.DB.Where("id = ?", r.Id).Delete(r).Error
+	err := repo.DB.Model(&r).Where("id = ?", r.Id).Delete(r).Error
 	if err != nil {
 		log.Log(err)
 		return false, err
