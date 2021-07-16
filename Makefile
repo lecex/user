@@ -17,6 +17,7 @@ micro:
 .PHONY: proto
 proto:
 	protoc -I . --micro_out=. --gogofaster_out=. proto/user/user.proto
+	protoc -I . --micro_out=. --gogofaster_out=. proto/secretKey/secretKey.proto
 	protoc -I . --micro_out=. --gogofaster_out=. proto/auth/auth.proto
 	protoc -I . --micro_out=. --gogofaster_out=. proto/frontPermit/frontPermit.proto
 	protoc -I . --micro_out=. --gogofaster_out=. proto/permission/permission.proto

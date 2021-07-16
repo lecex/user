@@ -10,6 +10,7 @@ import (
 	frontPermitPB "github.com/lecex/user/proto/frontPermit"
 	permissionPB "github.com/lecex/user/proto/permission"
 	rolePB "github.com/lecex/user/proto/role"
+	secretKeyPB "github.com/lecex/user/proto/secretKey"
 	userPB "github.com/lecex/user/proto/user"
 
 	"github.com/lecex/user/handler"
@@ -20,6 +21,7 @@ import (
 
 func init() {
 	user()
+	key()
 	frontPermit()
 	permission()
 	role()
@@ -46,6 +48,24 @@ func user() {
 			updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			PRIMARY KEY (id),
 			UNIQUE KEY username (username)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		`)
+	}
+}
+
+// key 角色数据迁移
+func key() {
+	secretKey := &secretKeyPB.SecretKey{}
+	if !db.DB.HasTable(&secretKey) {
+		db.DB.Exec(`
+			CREATE TABLE secret_keys (
+			user_id varchar(36) NOT NULL COMMENT '用户ID',
+			public_key varchar(64) DEFAULT NULL,
+			private_key varchar(64) DEFAULT NULL,
+			client_public_key varchar(128) DEFAULT NULL,
+			created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+			PRIMARY KEY (user_id)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		`)
 	}
