@@ -21,7 +21,7 @@ import (
 
 func init() {
 	user()
-	key()
+	secretKey()
 	frontPermit()
 	permission()
 	role()
@@ -53,8 +53,8 @@ func user() {
 	}
 }
 
-// key 角色数据迁移
-func key() {
+// secretKey 角色数据迁移
+func secretKey() {
 	secretKey := &secretKeyPB.SecretKey{}
 	if !db.DB.HasTable(&secretKey) {
 		db.DB.Exec(`
